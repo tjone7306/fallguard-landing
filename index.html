@@ -51,6 +51,7 @@
       font-size: 1.25rem; font-weight: 800; color: var(--blue);
       display: flex; align-items: center; gap: 8px;
     }
+    .nav-logo img { width: 28px; height: 28px; border-radius: 6px; }
     .nav-logo svg { width: 28px; height: 28px; }
     .nav-cta {
       background: var(--blue); color: #fff; padding: 10px 22px;
@@ -133,6 +134,40 @@
       color: var(--text-muted);
       font-weight: 400;
       margin-top: 4px;
+    }
+
+    /* ─── WATCH FRAMES ─── */
+    .watch-frame {
+      background: transparent;
+      max-width: 220px;
+      transition: transform 0.3s;
+    }
+    .watch-frame:hover { transform: translateY(-8px); }
+    .watch-frame img {
+      width: 100%;
+      display: block;
+      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.2));
+    }
+
+    /* ─── WATCH SHOWCASE ─── */
+    .watch-showcase {
+      max-width: 1200px; margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .watch-showcase-grid {
+      display: flex; gap: 60px; justify-content: center; align-items: center; flex-wrap: wrap;
+    }
+    .watch-showcase-item { text-align: center; }
+    .watch-flat-frame {
+      max-width: 180px; margin: 0 auto;
+      transition: transform 0.3s;
+    }
+    .watch-flat-frame:hover { transform: translateY(-6px); }
+    .watch-flat-frame img {
+      width: 100%;
+      border-radius: 44px;
+      display: block;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.15);
     }
 
     /* ─── HOW IT WORKS ─── */
@@ -255,7 +290,7 @@
   <!-- NAV -->
   <nav>
     <div class="nav-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 8v4l3 3"/></svg>
+      <img src="fallguard_icon.png" alt="FallGuard icon">
       FallGuard
     </div>
     <a href="#download" class="nav-cta">Download Free</a>
@@ -265,10 +300,10 @@
   <section class="hero">
     <div class="hero-badge">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-      100% Free on the App Store
+      Free Fall Detection on the App Store
     </div>
     <h1>Know <span>instantly</span> when a loved one falls.</h1>
-    <p>FallGuard uses Apple Watch to detect falls and sends instant push notifications to your phone. No subscriptions, no extra hardware, no complicated setup.</p>
+    <p>FallGuard uses Apple Watch to detect falls and sends instant push notifications to your phone. Free fall detection included &mdash; no extra hardware, no complicated setup.</p>
     <div class="hero-buttons">
       <a href="#download" class="btn-primary">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
@@ -284,16 +319,28 @@
     <p class="section-sub">A simple, intuitive app designed for the whole family.</p>
     <div class="preview-grid">
       <div>
+        <div class="watch-frame">
+          <img src="watch_dashboard_framed.png" alt="FallGuard Apple Watch dashboard showing vitals, fall detection status, and family code" loading="lazy">
+        </div>
+        <p class="phone-label">Watch Dashboard<span>Monitor vitals at a glance</span></p>
+      </div>
+      <div>
         <div class="phone-frame">
           <img src="screenshot1_dashboard.png" alt="FallGuard companion app dashboard showing connected watch status and fall history" loading="lazy">
         </div>
-        <p class="phone-label">Dashboard<span>Monitor status at a glance</span></p>
+        <p class="phone-label">Companion App<span>Stay connected from your iPhone</span></p>
+      </div>
+      <div>
+        <div class="watch-frame">
+          <img src="watch_alert_framed.png" alt="FallGuard Apple Watch fall alert with emergency contacts notified" loading="lazy">
+        </div>
+        <p class="phone-label">Fall Alert<span>Instant detection &amp; notification</span></p>
       </div>
       <div>
         <div class="phone-frame">
           <img src="screenshot2_alert.png" alt="FallGuard fall alert notification with GPS location and timestamp" loading="lazy">
         </div>
-        <p class="phone-label">Fall Alert<span>Instant notification with location</span></p>
+        <p class="phone-label">Alert Details<span>Location &amp; status on iPhone</span></p>
       </div>
     </div>
   </section>
@@ -360,6 +407,26 @@
         <div class="feature-icon" style="background:#F5F0FF;">&#128274;</div>
         <h3>Private & Secure</h3>
         <p>No accounts, no personal data stored on our servers. Your family's privacy is protected.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WATCH SHOWCASE -->
+  <section class="watch-showcase">
+    <h2 class="section-title">Designed for Apple Watch.</h2>
+    <p class="section-sub">A clean, glanceable interface that shows what matters most.</p>
+    <div class="watch-showcase-grid">
+      <div class="watch-showcase-item">
+        <div class="watch-flat-frame">
+          <img src="watch_dashboard_flat.png" alt="FallGuard watch screen showing monitoring dashboard with heart rate and battery" loading="lazy">
+        </div>
+        <p class="phone-label">Active Monitoring<span>Heart rate, respiration &amp; battery</span></p>
+      </div>
+      <div class="watch-showcase-item">
+        <div class="watch-flat-frame">
+          <img src="watch_alert_flat.png" alt="FallGuard watch screen showing fall detected alert with contacts notified" loading="lazy">
+        </div>
+        <p class="phone-label">Fall Detected<span>Contacts notified with GPS location</span></p>
       </div>
     </div>
   </section>
