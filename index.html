@@ -172,7 +172,8 @@
   .feat-list .fd{color:var(--muted);font-size:.92rem}
   @media(max-width:920px){.monitor-grid{grid-template-columns:1fr;gap:40px}}
   /* phone body-map mockup */
-  .phone{max-width:462px;width:100%;margin:0 auto;background:radial-gradient(120% 60% at 70% 12%,rgba(45,212,191,.10),transparent 60%),linear-gradient(180deg,#0b1a20,#081216);border:1px solid var(--border-strong);border-radius:34px;padding:26px 22px 32px;box-shadow:var(--shadow)}
+  .phone-wrap{width:100%;max-width:462px;margin:0 auto}
+  .phone{width:462px;transform-origin:top left;background:radial-gradient(120% 60% at 70% 12%,rgba(45,212,191,.10),transparent 60%),linear-gradient(180deg,#0b1a20,#081216);border:1px solid var(--border-strong);border-radius:34px;padding:26px 22px 32px;box-shadow:var(--shadow)}
   .ph-title{text-align:center;font-size:2.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:18px;background:linear-gradient(120deg,#37d0bd,#9fdcf6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .seg{display:grid;grid-template-columns:1fr 1fr;background:#16252f;border-radius:999px;padding:5px;margin-bottom:20px}
   .seg span{text-align:center;font-size:.9rem;font-weight:600;padding:11px 4px;border-radius:999px;color:var(--muted)}
@@ -193,7 +194,6 @@
   .ring-label{position:absolute;top:75%;left:0;right:0;text-align:center;pointer-events:none}
   .ring-label span{display:block;font-size:.82rem;color:#9aa9bf}
   .ring-label b{font-size:1.06rem;color:#fff;font-weight:700}
-  @media(max-width:480px){.bodymap{min-height:430px}.ring{width:184px;height:184px}.ph-title{font-size:2rem}}
 
   /* ---------- FEATURES GRID ---------- */
   .features{padding:90px 0;background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -365,6 +365,7 @@
         <li><span class="ck">&#10003;</span><div><div class="ft">Glanceable body-map home screen</div><div class="fd">Six clear tiles show heart rate, oxygen, respiration, battery, wear status and more at a glance.</div></div></li>
       </ul>
     </div>
+    <div class="phone-wrap">
     <div class="phone" role="img" aria-label="FallGuard companion home screen: the body-map dashboard for a protected family member, showing blood oxygen, heart rate, watch and phone battery, location and steps.">
       <div class="ph-title">FallGuard</div>
       <div class="seg"><span class="seg-on">People I watch over</span><span>My protection</span></div>
@@ -413,6 +414,7 @@
           <div class="ring-label"><span>Protected</span><b>Dad</b></div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -640,5 +642,23 @@
   </div>
 </footer>
 
+<script>
+  (function(){
+    function fitPhone(){
+      var w=document.querySelector('.phone-wrap');
+      var p=w&&w.querySelector('.phone');
+      if(!w||!p)return;
+      p.style.transform='none';
+      var natural=462;
+      var s=Math.min(1, w.clientWidth/natural);
+      p.style.transform='scale('+s+')';
+      w.style.height=(p.offsetHeight*s)+'px';
+    }
+    window.addEventListener('resize',fitPhone);
+    window.addEventListener('load',fitPhone);
+    if(document.readyState!=='loading')fitPhone();
+    else document.addEventListener('DOMContentLoaded',fitPhone);
+  })();
+</script>
 </body>
 </html>
