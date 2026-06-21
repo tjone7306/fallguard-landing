@@ -1,539 +1,608 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FallGuard - Fall Detection Alerts for Apple Watch</title>
-  <meta name="description" content="FallGuard detects falls on Apple Watch and instantly notifies family members. Free app for elderly safety and peace of mind.">
-  <meta name="keywords" content="fall detection, Apple Watch, elderly safety, senior monitoring, family alert, caregiver app">
-  <meta property="og:title" content="FallGuard - Know Instantly When a Loved One Falls">
-  <meta property="og:description" content="Free Apple Watch app that detects falls and sends instant push notifications to family members.">
-  <meta property="og:url" content="https://fallguard.me">
-  <meta property="og:type" content="website">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FallGuard - Fall Detection &amp; Health Monitoring for Apple Watch</title>
+<meta name="description" content="FallGuard detects falls on Apple Watch and instantly notifies family. Free app with all-day vitals monitoring — heart rate, blood oxygen, respiration — for elderly safety and peace of mind." />
+<meta name="keywords" content="fall detection, Apple Watch, elderly safety, senior monitoring, family alert, caregiver app, heart rate, blood oxygen, vitals monitoring" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="FallGuard - Know Instantly When a Loved One Falls" />
+<meta property="og:description" content="Free Apple Watch app that detects falls and monitors vitals all day, sending instant alerts to family." />
+<meta property="og:url" content="https://fallguard.me" />
+<meta name="theme-color" content="#0b1220" />
+<link rel="icon" href="fallguard_icon.png" />
+<meta property="og:image" content="https://fallguard.me/fallguard_icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0b1220;
+    --bg-2:#0f1828;
+    --surface:#131f33;
+    --surface-2:#18263d;
+    --border:rgba(148,163,184,.14);
+    --border-strong:rgba(148,163,184,.26);
+    --text:#e8eef7;
+    --muted:#9fb0c7;
+    --faint:#6b7d96;
+    --teal:#2dd4bf;
+    --teal-deep:#14b8a6;
+    --teal-soft:rgba(45,212,191,.12);
+    --coral:#fb7185;
+    --coral-soft:rgba(251,113,133,.12);
+    --radius:20px;
+    --radius-sm:14px;
+    --shadow:0 18px 50px -20px rgba(0,0,0,.65);
+    --maxw:1140px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  section{position:relative}
+  .eyebrow{
+    display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--teal);margin-bottom:14px;
+  }
+  h1,h2,h3{letter-spacing:-.02em;line-height:1.12}
+  h2{font-size:clamp(1.9rem,4vw,2.7rem);font-weight:800}
+  .lead{color:var(--muted);font-size:1.08rem;max-width:620px}
+  .section-head{text-align:center;max-width:680px;margin:0 auto 56px}
+  .section-head .lead{margin:16px auto 0}
 
-    :root {
-      --blue: #1B5E8C;
-      --blue-light: #E8F4FD;
-      --green: #34C759;
-      --green-dark: #2E7D32;
-      --orange: #FF9500;
-      --red: #FF3B30;
-      --bg: #FAFBFC;
-      --text: #1a1a2e;
-      --text-muted: #6B7280;
-      --card-bg: #ffffff;
-      --radius: 16px;
-    }
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,18,32,.72);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.18rem}
+  .brand img{width:36px;height:36px;border-radius:10px;box-shadow:0 0 0 1px rgba(255,255,255,.16),0 4px 14px -4px rgba(0,0,0,.6)}
+  .nav-links{display:flex;align-items:center;gap:30px}
+  .nav-links a.link{color:var(--muted);font-weight:500;font-size:.95rem;transition:color .2s}
+  .nav-links a.link:hover{color:var(--text)}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    font-weight:600;font-size:.96rem;padding:12px 22px;border-radius:999px;
+    transition:transform .18s ease,box-shadow .2s ease,background .2s ease;cursor:pointer;border:0;
+  }
+  .btn-primary{background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#062420;box-shadow:0 10px 28px -10px rgba(45,212,191,.6)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px -10px rgba(45,212,191,.7)}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border-strong)}
+  .btn-ghost:hover{background:var(--surface);border-color:var(--teal)}
+  .nav .btn{padding:10px 20px}
+  @media(max-width:760px){.nav-links a.link{display:none}}
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+  /* ---------- HERO ---------- */
+  .hero{padding:84px 0 70px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+  .hero h1{font-size:clamp(2.4rem,5.4vw,3.85rem);font-weight:800;margin-bottom:22px}
+  .hero h1 .accent{
+    background:linear-gradient(120deg,var(--teal),#7dd3fc);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hero p.lead{font-size:1.16rem;margin-bottom:32px}
+  .pill{
+    display:inline-flex;align-items:center;gap:9px;padding:7px 15px;border-radius:999px;
+    background:var(--teal-soft);border:1px solid rgba(45,212,191,.3);color:var(--teal);
+    font-weight:600;font-size:.83rem;letter-spacing:.02em;margin-bottom:26px;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(45,212,191,.6);animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(45,212,191,.55)}70%{box-shadow:0 0 0 12px rgba(45,212,191,0)}100%{box-shadow:0 0 0 0 rgba(45,212,191,0)}}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .hero-note{margin-top:20px;color:var(--faint);font-size:.9rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .hero-note b{color:var(--muted);font-weight:600}
 
-    /* ─── NAV ─── */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(250,251,252,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      padding: 14px 24px;
-      display: flex; align-items: center; justify-content: space-between;
-      max-width: 1200px; margin: 0 auto;
-    }
-    .nav-logo {
-      font-size: 1.25rem; font-weight: 800; color: var(--blue);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .nav-logo img { width: 28px; height: 28px; border-radius: 6px; }
-    .nav-logo svg { width: 28px; height: 28px; }
-    .nav-cta {
-      background: var(--blue); color: #fff; padding: 10px 22px;
-      border-radius: 24px; font-size: 0.875rem; font-weight: 600;
-      text-decoration: none; transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(27,94,140,0.3); }
+  /* hero visual */
+  .hero-visual{position:relative;display:flex;justify-content:center}
+  .glow{position:absolute;inset:-10% -10% auto;height:420px;background:radial-gradient(circle at 60% 30%,rgba(45,212,191,.22),transparent 60%);filter:blur(20px);z-index:0}
+  .device-stack{position:relative;z-index:1;width:100%;max-width:430px}
+  .device-stack img{
+    width:100%;border-radius:26px;border:1px solid var(--border-strong);
+    box-shadow:var(--shadow);background:var(--surface);
+  }
+  .float-card{
+    position:absolute;z-index:2;background:rgba(19,31,51,.92);backdrop-filter:blur(8px);
+    border:1px solid var(--border-strong);border-radius:16px;padding:13px 16px;
+    box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;
+  }
+  .float-card .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:1.1rem}
+  .float-card .t{font-size:.72rem;color:var(--faint);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .float-card .v{font-size:1.05rem;font-weight:700;line-height:1.1}
+  .fc-hr{top:8%;left:-6%}
+  .fc-hr .ic{background:var(--coral-soft);color:var(--coral)}
+  .fc-alert{bottom:9%;right:-5%}
+  .fc-alert .ic{background:var(--teal-soft);color:var(--teal)}
+  @media(max-width:920px){
+    .hero-grid{grid-template-columns:1fr;gap:50px}
+    .hero-visual{order:-1}
+    .device-stack{max-width:330px}
+    .float-card{display:none}
+  }
 
-    /* ─── HERO ─── */
-    .hero {
-      max-width: 1200px; margin: 0 auto;
-      padding: 80px 24px 60px;
-      text-align: center;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--blue-light); color: var(--blue);
-      font-size: 0.8rem; font-weight: 600;
-      padding: 6px 16px; border-radius: 20px; margin-bottom: 20px;
-    }
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800;
-      line-height: 1.15; max-width: 720px; margin: 0 auto 20px;
-    }
-    .hero h1 span { color: var(--blue); }
-    .hero p {
-      font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-muted);
-      max-width: 560px; margin: 0 auto 36px;
-    }
-    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--blue); color: #fff; padding: 16px 32px;
-      border-radius: 14px; font-size: 1.05rem; font-weight: 600;
-      text-decoration: none; transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,94,140,0.25); }
-    .btn-primary svg { width: 22px; height: 22px; }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: transparent; color: var(--blue); padding: 16px 28px;
-      border: 2px solid var(--blue); border-radius: 14px;
-      font-size: 1.05rem; font-weight: 600; text-decoration: none;
-      transition: background 0.15s;
-    }
-    .btn-secondary:hover { background: var(--blue-light); }
+  /* ---------- LOGO / TRUST STRIP ---------- */
+  .strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg-2)}
+  .strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:30px 0}
+  .strip-item{text-align:center}
+  .strip-item .n{font-size:1.7rem;font-weight:800;color:var(--text);letter-spacing:-.02em}
+  .strip-item .l{font-size:.84rem;color:var(--muted);margin-top:2px}
+  @media(max-width:680px){.strip-grid{grid-template-columns:repeat(2,1fr);gap:22px}}
 
-    /* ─── APP PREVIEW ─── */
-    .app-preview {
-      max-width: 1200px; margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-    .preview-grid {
-      display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: nowrap;
-    }
-    .phone-frame {
-      background: #1a1a2e;
-      border-radius: 36px;
-      padding: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1) inset;
-      max-width: 260px;
-      flex: 0 1 260px;
-      transition: transform 0.3s;
-    }
-    .phone-frame:hover { transform: translateY(-8px); }
-    .phone-frame img {
-      width: 100%;
-      border-radius: 26px;
-      display: block;
-    }
-    .phone-label {
-      text-align: center;
-      margin-top: 16px;
-      font-weight: 600;
-      color: var(--text);
-      font-size: 1rem;
-    }
-    .phone-label span {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 400;
-      margin-top: 4px;
-    }
+  /* ---------- MONITORING (NEW) ---------- */
+  .monitor{padding:90px 0}
+  .monitor-grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}
+  .dash{
+    background:linear-gradient(160deg,var(--surface),var(--bg-2));
+    border:1px solid var(--border-strong);border-radius:24px;padding:26px;box-shadow:var(--shadow);
+  }
+  .dash-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+  .dash-top .who{display:flex;align-items:center;gap:11px}
+  .avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal-deep));display:grid;place-items:center;font-weight:700;color:#062420}
+  .dash-top .nm{font-weight:700;font-size:.98rem}
+  .dash-top .st{font-size:.78rem;color:var(--teal);font-weight:600}
+  .badge-ok{font-size:.74rem;font-weight:700;color:var(--teal);background:var(--teal-soft);padding:6px 12px;border-radius:999px;border:1px solid rgba(45,212,191,.3)}
+  .vit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+  .vit{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:14px}
+  .vit .lab{font-size:.7rem;color:var(--faint);font-weight:600;text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:6px}
+  .vit .num{font-size:1.5rem;font-weight:800;margin-top:6px;letter-spacing:-.02em}
+  .vit .num span{font-size:.8rem;font-weight:600;color:var(--muted)}
+  .heart{color:var(--coral)}
+  .tealc{color:var(--teal)}
+  .spark{margin-top:4px}
+  .history{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:16px}
+  .history .hh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .history .hh .lab{font-size:.78rem;color:var(--muted);font-weight:600}
+  .history .hh .rng{font-size:.72rem;color:var(--faint)}
+  .feat-list{list-style:none;margin-top:26px;display:grid;gap:16px}
+  .feat-list li{display:flex;gap:14px;align-items:flex-start}
+  .feat-list .ck{flex:none;width:26px;height:26px;border-radius:8px;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;font-weight:800;font-size:.8rem;margin-top:2px}
+  .feat-list .ft{font-weight:600}
+  .feat-list .fd{color:var(--muted);font-size:.92rem}
+  @media(max-width:920px){.monitor-grid{grid-template-columns:1fr;gap:40px}}
 
-    /* ─── WATCH FRAMES ─── */
-    .watch-frame {
-      background: transparent;
-      max-width: 200px;
-      flex: 0 1 200px;
-      transition: transform 0.3s;
-    }
-    .watch-frame:hover { transform: translateY(-8px); }
-    .watch-frame img {
-      width: 100%;
-      display: block;
-      filter: drop-shadow(0 16px 40px rgba(0,0,0,0.2));
-    }
+  /* ---------- FEATURES GRID ---------- */
+  .features{padding:90px 0;background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:28px;transition:transform .2s ease,border-color .2s ease;
+  }
+  .card:hover{transform:translateY(-4px);border-color:var(--border-strong)}
+  .card .ic{
+    width:50px;height:50px;border-radius:14px;display:grid;place-items:center;
+    font-size:1.4rem;margin-bottom:18px;background:var(--teal-soft);color:var(--teal);
+  }
+  .card.emer .ic{background:var(--coral-soft);color:var(--coral)}
+  .card h3{font-size:1.12rem;margin-bottom:8px;font-weight:700}
+  .card p{color:var(--muted);font-size:.94rem}
+  @media(max-width:880px){.cards{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.cards{grid-template-columns:1fr}}
 
-    /* ─── WATCH SHOWCASE ─── */
-    .watch-showcase {
-      max-width: 1200px; margin: 0 auto;
-      padding: 60px 24px 80px;
-    }
-    .watch-showcase-grid {
-      display: flex; gap: 60px; justify-content: center; align-items: center; flex-wrap: wrap;
-    }
-    .watch-showcase-item { text-align: center; }
-    .watch-flat-frame {
-      max-width: 180px; margin: 0 auto;
-      transition: transform 0.3s;
-    }
-    .watch-flat-frame:hover { transform: translateY(-6px); }
-    .watch-flat-frame img {
-      width: 100%;
-      border-radius: 44px;
-      display: block;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.15);
-    }
+  /* ---------- WHATS NEW (v2) ---------- */
+  .new{padding:90px 0}
+  .new-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .new-item{display:flex;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:22px 24px}
+  .new-item .ic{flex:none;width:44px;height:44px;border-radius:12px;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;font-size:1.2rem}
+  .new-item h3{font-size:1.04rem;margin-bottom:4px}
+  .new-item p{color:var(--muted);font-size:.9rem}
+  @media(max-width:760px){.new-grid{grid-template-columns:1fr}}
 
-    /* ─── DEMO VIDEO ─── */
-    .demo-video {
-      max-width: 1200px; margin: 0 auto;
-      padding: 60px 24px 80px;
-      text-align: center;
-    }
-    .video-container {
-      max-width: 720px; margin: 0 auto;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-      background: #000;
-    }
-    .video-container video {
-      width: 100%; display: block;
-    }
+  /* ---------- HOW IT WORKS ---------- */
+  .how{padding:90px 0;background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
+  .step{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:30px 24px}
+  .step .num{
+    width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--teal-deep));
+    color:#062420;font-weight:800;display:grid;place-items:center;font-size:1.05rem;margin-bottom:16px;
+  }
+  .step h3{font-size:1.05rem;margin-bottom:7px}
+  .step p{color:var(--muted);font-size:.9rem}
+  @media(max-width:880px){.steps{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:480px){.steps{grid-template-columns:1fr}}
 
-    /* ─── HOW IT WORKS ─── */
-    .how-it-works {
-      max-width: 1200px; margin: 0 auto;
-      padding: 80px 24px;
-    }
-    .section-title {
-      font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 800;
-      text-align: center; margin-bottom: 12px;
-    }
-    .section-sub {
-      text-align: center; color: var(--text-muted);
-      max-width: 500px; margin: 0 auto 48px; font-size: 1.05rem;
-    }
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 28px;
-    }
-    .step {
-      background: var(--card-bg); border-radius: var(--radius);
-      padding: 32px 24px; text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      transition: transform 0.2s;
-    }
-    .step:hover { transform: translateY(-4px); }
-    .step-number {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: var(--blue-light); color: var(--blue);
-      font-weight: 800; font-size: 1.2rem;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 16px;
-    }
-    .step h3 { font-size: 1.1rem; margin-bottom: 8px; }
-    .step p { font-size: 0.9rem; color: var(--text-muted); }
+  /* ---------- GALLERY ---------- */
+  .gallery{padding:90px 0}
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .shot{text-align:center}
+  .shot .frame{
+    background:linear-gradient(160deg,var(--surface),var(--bg-2));border:1px solid var(--border);
+    border-radius:20px;padding:16px;margin-bottom:14px;transition:transform .2s ease,border-color .2s;
+  }
+  .shot .frame:hover{transform:translateY(-4px);border-color:var(--teal)}
+  .shot img{border-radius:12px;margin:0 auto}
+  .shot .cap{font-weight:700;font-size:.96rem}
+  .shot .sub{color:var(--muted);font-size:.84rem}
+  @media(max-width:880px){.shots{grid-template-columns:repeat(2,1fr)}}
 
-    /* ─── FEATURES ─── */
-    .features {
-      max-width: 1200px; margin: 0 auto;
-      padding: 80px 24px;
-    }
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-    }
-    .feature-card {
-      background: var(--card-bg); border-radius: var(--radius);
-      padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      transition: transform 0.2s;
-    }
-    .feature-card:hover { transform: translateY(-3px); }
-    .feature-icon {
-      width: 48px; height: 48px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; margin-bottom: 14px;
-    }
-    .feature-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
-    .feature-card p { font-size: 0.9rem; color: var(--text-muted); }
+  /* ---------- VIDEO ---------- */
+  .video{padding:30px 0 90px}
+  .video-shell{
+    max-width:760px;margin:0 auto;border-radius:24px;overflow:hidden;
+    border:1px solid var(--border-strong);box-shadow:var(--shadow);background:#000;
+  }
+  .video-shell video{width:100%;display:block}
 
-    /* ─── COMPARISON ─── */
-    .comparison {
-      max-width: 900px; margin: 0 auto;
-      padding: 80px 24px;
-    }
-    .compare-table {
-      width: 100%; border-collapse: collapse;
-      background: var(--card-bg); border-radius: var(--radius);
-      overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .compare-table th, .compare-table td {
-      padding: 14px 18px; text-align: left;
-      border-bottom: 1px solid #f0f0f0; font-size: 0.9rem;
-    }
-    .compare-table thead th {
-      background: var(--blue); color: #fff; font-weight: 600;
-    }
-    .compare-table thead th:first-child { background: #14496e; }
-    .check { color: var(--green); font-weight: 700; }
-    .cross { color: #ccc; }
-    .highlight-col { background: var(--blue-light); }
-    .compare-table tbody tr:hover { background: #f8f9fa; }
+  /* ---------- COMPARE ---------- */
+  .compare{padding:90px 0;background:var(--bg-2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .table-wrap{overflow-x:auto;border-radius:20px;border:1px solid var(--border-strong)}
+  table{width:100%;border-collapse:collapse;min-width:620px;background:var(--surface)}
+  th,td{padding:16px 18px;text-align:left;border-bottom:1px solid var(--border);font-size:.94rem}
+  thead th{font-weight:700;font-size:.9rem;color:var(--muted);background:var(--bg-2)}
+  thead th.us{color:var(--teal)}
+  tbody tr:last-child td{border-bottom:0}
+  td.feat{font-weight:600}
+  td.us{color:var(--text);font-weight:600;background:rgba(45,212,191,.05)}
+  td.muted{color:var(--faint)}
+  .yes{color:var(--teal);font-weight:700}
 
-    /* ─── CTA ─── */
-    .cta-section {
-      max-width: 700px; margin: 0 auto;
-      padding: 80px 24px; text-align: center;
-    }
-    .cta-section h2 {
-      font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800;
-      margin-bottom: 16px;
-    }
-    .cta-section p {
-      color: var(--text-muted); margin-bottom: 32px; font-size: 1.05rem;
-    }
+  /* ---------- FINAL CTA ---------- */
+  .final{padding:96px 0}
+  .final-card{
+    text-align:center;background:
+      radial-gradient(circle at 50% 0%,rgba(45,212,191,.16),transparent 55%),
+      linear-gradient(160deg,var(--surface),var(--bg-2));
+    border:1px solid var(--border-strong);border-radius:30px;padding:64px 32px;box-shadow:var(--shadow);
+  }
+  .final-card h2{margin-bottom:16px}
+  .final-card .lead{margin:0 auto 30px}
+  .final-card .micro{margin-top:20px;color:var(--faint);font-size:.86rem}
 
-    /* ─── FOOTER ─── */
-    footer {
-      max-width: 1200px; margin: 0 auto;
-      padding: 32px 24px; text-align: center;
-      border-top: 1px solid #e5e7eb;
-      color: var(--text-muted); font-size: 0.8rem;
-    }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 600px) {
-      .hero { padding: 48px 20px 40px; }
-      .hero-buttons { flex-direction: column; align-items: center; }
-      .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
-      .preview-grid { gap: 24px; flex-wrap: wrap; }
-      .phone-frame { flex: 0 1 220px; max-width: 220px; }
-      .watch-frame { flex: 0 1 160px; max-width: 160px; }
-      .compare-table { font-size: 0.8rem; }
-      .compare-table th, .compare-table td { padding: 10px 12px; }
-    }
-  </style>
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--border);padding:46px 0 40px;background:var(--bg-2)}
+  .foot-grid{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .foot-brand{display:flex;align-items:center;gap:11px;font-weight:800}
+  .foot-brand img{width:30px;height:30px;border-radius:8px;box-shadow:0 0 0 1px rgba(255,255,255,.14)}
+  .foot-links{display:flex;gap:22px;align-items:center;color:var(--muted);font-size:.92rem;flex-wrap:wrap}
+  .foot-links a:hover{color:var(--text)}
+  .legal{color:var(--faint);font-size:.82rem;margin-top:22px;max-width:720px}
+  .legal a{color:var(--muted)}
+</style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">
-      <img src="fallguard_icon.png" alt="FallGuard icon">
-      FallGuard
-    </div>
-    <a href="https://apps.apple.com/us/app/fallguard-companion/id6761449719" class="nav-cta">Download Free</a>
-  </nav>
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><img src="fallguard_icon.png" alt="FallGuard app icon" />FallGuard</a>
+    <nav class="nav-links">
+      <a class="link" href="#monitoring">Monitoring</a>
+      <a class="link" href="#features">Features</a>
+      <a class="link" href="#how">How it works</a>
+      <a class="link" href="#compare">Compare</a>
+      <a class="btn btn-primary" href="https://apps.apple.com/us/app/fallguard-companion/id6761449719">Download Free</a>
+    </nav>
+  </div>
+</header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-badge">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-      Free Fall Detection on the App Store
-    </div>
-    <h1>Know <span>instantly</span> when a loved one falls.</h1>
-    <p>FallGuard uses Apple Watch to detect falls and sends instant push notifications to your phone. Free fall detection included &mdash; no extra hardware, no complicated setup.</p>
-    <div class="hero-buttons">
-      <a href="https://apps.apple.com/us/app/fallguard-companion/id6761449719" class="btn-primary">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        Download for iPhone
-      </a>
-      <a href="#how" class="btn-secondary">See How It Works</a>
-    </div>
-  </section>
+<a id="top"></a>
 
-  <!-- APP PREVIEW -->
-  <section class="app-preview">
-    <h2 class="section-title">See FallGuard in action.</h2>
-    <p class="section-sub">A simple, intuitive app designed for the whole family.</p>
-    <div class="preview-grid">
-      <div>
-        <div class="watch-frame">
-          <img src="watch_dashboard_framed.png" alt="FallGuard Apple Watch dashboard showing vitals, fall detection status, and family code" loading="lazy">
-        </div>
-        <p class="phone-label">Watch Dashboard<span>Monitor vitals at a glance</span></p>
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="pill"><span class="dot"></span> Free on the App Store · No subscription</span>
+      <h1>Know instantly when a loved one <span class="accent">falls</span>.</h1>
+      <p class="lead">FallGuard turns an Apple Watch into a quiet guardian — detecting falls and watching over vitals all day, then alerting family the moment something looks wrong. No extra hardware, no monthly fees, no complicated setup.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://apps.apple.com/us/app/fallguard-companion/id6761449719">Download for iPhone</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
       </div>
-      <div>
-        <div class="phone-frame">
-          <img src="screenshot1_dashboard.png" alt="FallGuard companion app dashboard showing connected watch status and fall history" loading="lazy">
-        </div>
-        <p class="phone-label">Companion App<span>Stay connected from your iPhone</span></p>
+      <div class="hero-note"><b>Set up in under 2 minutes.</b> Requires Apple Watch Series 4 or later.</div>
+    </div>
+    <div class="hero-visual">
+      <div class="glow"></div>
+      <div class="device-stack">
+        <img src="watch_dashboard_framed.png" alt="FallGuard Apple Watch dashboard showing vitals, fall detection status, and family code" />
       </div>
-      <div>
-        <div class="watch-frame">
-          <img src="watch_alert_framed.png" alt="FallGuard Apple Watch fall alert with emergency contacts notified" loading="lazy">
-        </div>
-        <p class="phone-label">Fall Alert<span>Instant detection &amp; notification</span></p>
+      <div class="float-card fc-hr">
+        <div class="ic">&#9829;</div>
+        <div><div class="t">Heart rate</div><div class="v">72 <span style="font-size:.8rem;color:var(--muted)">bpm</span></div></div>
       </div>
-      <div>
-        <div class="phone-frame">
-          <img src="screenshot2_alert.png" alt="FallGuard fall alert notification with GPS location and timestamp" loading="lazy">
-        </div>
-        <p class="phone-label">Alert Details<span>Location &amp; status on iPhone</span></p>
+      <div class="float-card fc-alert">
+        <div class="ic">&#10003;</div>
+        <div><div class="t">Status</div><div class="v">All clear</div></div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- DEMO VIDEO -->
-  <section class="demo-video">
-    <h2 class="section-title">Watch it in action.</h2>
-    <p class="section-sub">See how FallGuard detects a fall and alerts the family in real time.</p>
-    <div class="video-container">
-      <video controls playsinline preload="metadata" poster="">
-        <source src="FallGuard2.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+<!-- TRUST STRIP -->
+<section class="strip">
+  <div class="wrap strip-grid">
+    <div class="strip-item"><div class="n">$0</div><div class="l">Free to download &amp; use</div></div>
+    <div class="strip-item"><div class="n">&lt;2 min</div><div class="l">Setup, no account needed</div></div>
+    <div class="strip-item"><div class="n">24/7</div><div class="l">All-day background monitoring</div></div>
+    <div class="strip-item"><div class="n">Seconds</div><div class="l">From fall to family alert</div></div>
+  </div>
+</section>
+
+<!-- MONITORING (NEW) -->
+<section class="monitor" id="monitoring">
+  <div class="wrap monitor-grid">
+    <div>
+      <span class="eyebrow">New · All-day health monitoring</span>
+      <h2>More than fall detection. A full day of vitals.</h2>
+      <p class="lead">FallGuard now tracks the numbers that matter throughout the entire day — not just a single snapshot. Family can open the companion app any time and see how their loved one is really doing, with full-day history for every reading.</p>
+      <ul class="feat-list">
+        <li><span class="ck">&#10003;</span><div><div class="ft">Heart rate, blood oxygen &amp; respiration</div><div class="fd">Continuous readings collected quietly in the background, all day long.</div></div></li>
+        <li><span class="ck">&#10003;</span><div><div class="ft">Full-day history, not just a snapshot</div><div class="fd">Scroll back through the day to spot trends and changes over time.</div></div></li>
+        <li><span class="ck">&#10003;</span><div><div class="ft">Smart threshold alerts</div><div class="fd">Get notified when a vital drifts outside a healthy range — early, before it becomes a crisis.</div></div></li>
+        <li><span class="ck">&#10003;</span><div><div class="ft">Glanceable body-map home screen</div><div class="fd">Six clear tiles show heart rate, oxygen, respiration, battery, wear status and more at a glance.</div></div></li>
+      </ul>
     </div>
-  </section>
+    <div class="dash" role="img" aria-label="FallGuard companion dashboard preview showing live vitals and daily history">
+      <div class="dash-top">
+        <div class="who">
+          <div class="avatar">M</div>
+          <div><div class="nm">Mom</div><div class="st">&#9679; Watch worn · Monitoring</div></div>
+        </div>
+        <div class="badge-ok">All clear</div>
+      </div>
+      <div class="vit-grid">
+        <div class="vit">
+          <div class="lab"><span class="heart">&#9829;</span> Heart</div>
+          <div class="num heart">72<span> bpm</span></div>
+        </div>
+        <div class="vit">
+          <div class="lab"><span class="tealc">&#9737;</span> Oxygen</div>
+          <div class="num">98<span> %</span></div>
+        </div>
+        <div class="vit">
+          <div class="lab"><span class="tealc">&#8767;</span> Resp.</div>
+          <div class="num">14<span> /min</span></div>
+        </div>
+      </div>
+      <div class="history">
+        <div class="hh"><div class="lab">Heart rate — today</div><div class="rng">58–96 bpm</div></div>
+        <svg class="spark" viewBox="0 0 320 70" width="100%" height="70" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(45,212,191,.35)"/>
+              <stop offset="100%" stop-color="rgba(45,212,191,0)"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,52 L24,46 L48,50 L72,38 L96,42 L120,30 L144,36 L168,24 L192,33 L216,28 L240,40 L264,34 L288,44 L320,38 L320,70 L0,70 Z" fill="url(#g)"/>
+          <path d="M0,52 L24,46 L48,50 L72,38 L96,42 L120,30 L144,36 L168,24 L192,33 L216,28 L240,40 L264,34 L288,44 L320,38" fill="none" stroke="#2dd4bf" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- HOW IT WORKS -->
-  <section class="how-it-works" id="how">
-    <h2 class="section-title">Set up in under 2 minutes.</h2>
-    <p class="section-sub">No accounts to create. No hardware to buy. Just a free app and a family code.</p>
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Built for peace of mind</span>
+      <h2>Everything your family needs to stay connected and safe.</h2>
+    </div>
+    <div class="cards">
+      <div class="card emer">
+        <div class="ic">&#9888;</div>
+        <h3>Real-time fall detection</h3>
+        <p>Uses Apple Watch's built-in accelerometer and gyroscope to detect hard falls — even when the app isn't open.</p>
+      </div>
+      <div class="card">
+        <div class="ic">&#128276;</div>
+        <h3>Instant push notifications</h3>
+        <p>Family members get a notification within seconds of a fall. No call centers, no waiting on hold.</p>
+      </div>
+      <div class="card">
+        <div class="ic">&#128205;</div>
+        <h3>Location with every alert</h3>
+        <p>Each fall alert includes GPS coordinates so you know exactly where your loved one is.</p>
+      </div>
+      <div class="card">
+        <div class="ic">&#9829;</div>
+        <h3>All-day vitals monitoring</h3>
+        <p>Heart rate, blood oxygen and respiration tracked continuously, with full-day history.</p>
+      </div>
+      <div class="card">
+        <div class="ic">&#9201;</div>
+        <h3>Always-on &amp; silent</h3>
+        <p>Runs quietly in the background. The wearer never has to open the app or press a button.</p>
+      </div>
+      <div class="card">
+        <div class="ic">&#128274;</div>
+        <h3>Private &amp; secure</h3>
+        <p>No accounts to create. We don't store personal data on our servers — your family's privacy stays yours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHATS NEW (v2) -->
+<section class="new">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">What's new in FallGuard</span>
+      <h2>Smarter monitoring, fewer surprises.</h2>
+      <p class="lead">The latest release adds a layer of awareness around the people you care about — so you're never left guessing.</p>
+    </div>
+    <div class="new-grid">
+      <div class="new-item">
+        <div class="ic">&#8986;</div>
+        <div><h3>Wear detection</h3><p>Know whether the watch is actually being worn, so monitoring gaps never go unnoticed.</p></div>
+      </div>
+      <div class="new-item">
+        <div class="ic">&#128241;</div>
+        <div><h3>Phone &amp; watch battery alerts</h3><p>Get a heads-up before a low battery on either device interrupts protection.</p></div>
+      </div>
+      <div class="new-item">
+        <div class="ic">&#128506;</div>
+        <div><h3>Location at a glance</h3><p>Check your loved one's last known location any time from the companion app.</p></div>
+      </div>
+      <div class="new-item">
+        <div class="ic">&#128202;</div>
+        <div><h3>Weekly digest</h3><p>A simple weekly summary of vitals and activity, delivered so you can see the bigger picture.</p></div>
+      </div>
+      <div class="new-item">
+        <div class="ic">&#9635;</div>
+        <div><h3>Home screen widget</h3><p>Pin a live status widget so reassurance is one glance away — no need to open the app.</p></div>
+      </div>
+      <div class="new-item">
+        <div class="ic">&#128100;</div>
+        <div><h3>Role-aware design</h3><p>A calm, focused experience tailored for both the wearer and the family caring for them.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Set up in under 2 minutes</span>
+      <h2>No accounts. No hardware. Just a free app and a family code.</h2>
+    </div>
     <div class="steps">
       <div class="step">
-        <div class="step-number">1</div>
+        <div class="num">1</div>
         <h3>Install on Apple Watch</h3>
         <p>The wearer installs FallGuard on their Apple Watch. It starts monitoring automatically in the background.</p>
       </div>
       <div class="step">
-        <div class="step-number">2</div>
-        <h3>Share the Family Code</h3>
-        <p>The watch displays a unique code. Text it to your son, daughter, or anyone who should be notified.</p>
+        <div class="num">2</div>
+        <h3>Share the family code</h3>
+        <p>The watch displays a unique code. Text it to a son, daughter, or anyone who should be notified.</p>
       </div>
       <div class="step">
-        <div class="step-number">3</div>
-        <h3>Family Installs Companion</h3>
+        <div class="num">3</div>
+        <h3>Family installs the app</h3>
         <p>Family members install the companion app on their iPhone and enter the code. That's it.</p>
       </div>
       <div class="step">
-        <div class="step-number">4</div>
-        <h3>Get Instant Alerts</h3>
-        <p>If a fall is detected, family members get an instant push notification with the time and GPS location.</p>
+        <div class="num">4</div>
+        <h3>Get instant alerts</h3>
+        <p>If a fall is detected, family receives an instant push notification with the time and GPS location.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FEATURES -->
-  <section class="features">
-    <h2 class="section-title">Built for peace of mind.</h2>
-    <p class="section-sub">Everything your family needs to stay connected and safe.</p>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#FFF0F0;">&#128168;</div>
-        <h3>Real-Time Fall Detection</h3>
-        <p>Uses Apple Watch's built-in accelerometer and gyroscope. Works even when the app isn't open.</p>
+<!-- GALLERY -->
+<section class="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">See FallGuard in action</span>
+      <h2>A simple, intuitive app for the whole family.</h2>
+    </div>
+    <div class="shots">
+      <div class="shot">
+        <div class="frame"><img src="watch_dashboard_framed.png" alt="FallGuard Apple Watch dashboard showing vitals and family code" /></div>
+        <div class="cap">Watch dashboard</div>
+        <div class="sub">Monitor vitals at a glance</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#F0F7FF;">&#128276;</div>
-        <h3>Instant Push Notifications</h3>
-        <p>Family members get a notification within seconds of a fall. No call centers, no delays.</p>
+      <div class="shot">
+        <div class="frame"><img src="screenshot1_dashboard.png" alt="FallGuard companion app dashboard showing connected watch status and history" /></div>
+        <div class="cap">Companion app</div>
+        <div class="sub">Stay connected from your iPhone</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#F0FFF4;">&#128205;</div>
-        <h3>Fall Location</h3>
-        <p>Every alert includes GPS coordinates so you know exactly where your loved one is.</p>
+      <div class="shot">
+        <div class="frame"><img src="watch_alert_framed.png" alt="FallGuard Apple Watch fall alert with emergency contacts notified" /></div>
+        <div class="cap">Fall alert</div>
+        <div class="sub">Instant detection &amp; notification</div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#FFFCF0;">&#9201;</div>
-        <h3>Always-On Monitoring</h3>
-        <p>Runs silently in the background. The wearer doesn't need to open the app or press any buttons.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#FFF5F0;">&#128293;</div>
-        <h3>No Extra Hardware</h3>
-        <p>Works with the Apple Watch your parent already has. No pendants, no base stations, no monthly fees.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon" style="background:#F5F0FF;">&#128274;</div>
-        <h3>Private & Secure</h3>
-        <p>No accounts, no personal data stored on our servers. Your family's privacy is protected.</p>
+      <div class="shot">
+        <div class="frame"><img src="screenshot2_alert.png" alt="FallGuard fall alert notification with GPS location and timestamp" /></div>
+        <div class="cap">Alert details</div>
+        <div class="sub">Location &amp; status on iPhone</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- WATCH SHOWCASE -->
-  <section class="watch-showcase">
-    <h2 class="section-title">Designed for Apple Watch.</h2>
-    <p class="section-sub">A clean, glanceable interface that shows what matters most.</p>
-    <div class="watch-showcase-grid">
-      <div class="watch-showcase-item">
-        <div class="watch-flat-frame">
-          <img src="watch_dashboard_flat.png" alt="FallGuard watch screen showing monitoring dashboard with heart rate and battery" loading="lazy">
-        </div>
-        <p class="phone-label">Active Monitoring<span>Heart rate, respiration &amp; battery</span></p>
-      </div>
-      <div class="watch-showcase-item">
-        <div class="watch-flat-frame">
-          <img src="watch_alert_flat.png" alt="FallGuard watch screen showing fall detected alert with contacts notified" loading="lazy">
-        </div>
-        <p class="phone-label">Fall Detected<span>Contacts notified with GPS location</span></p>
+<!-- VIDEO -->
+<section class="video">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Watch it in action</span>
+      <h2>See a fall detected and the family alerted in real time.</h2>
+    </div>
+    <div class="video-shell">
+      <video controls preload="metadata" poster="watch_alert_framed.png">
+        <source src="FallGuard2.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="compare" id="compare">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">How FallGuard compares</span>
+      <h2>The free, family-first way to watch over the people you love.</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th class="us">FallGuard</th>
+            <th>Apple built-in</th>
+            <th>Medical alert devices</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="feat">Cost</td><td class="us">Free</td><td class="muted">Free (built-in)</td><td class="muted">$30–50 / month</td></tr>
+          <tr><td class="feat">Notifies family</td><td class="us"><span class="yes">Instant push</span></td><td class="muted">No (911 only)</td><td class="muted">Call-center relays</td></tr>
+          <tr><td class="feat">All-day vitals history</td><td class="us"><span class="yes">Yes</span></td><td class="muted">No</td><td class="muted">No</td></tr>
+          <tr><td class="feat">Uses existing device</td><td class="us">Apple Watch</td><td class="muted">Yes</td><td class="muted">New hardware</td></tr>
+          <tr><td class="feat">Setup time</td><td class="us">Under 2 min</td><td class="muted">Already on</td><td class="muted">Hardware + account</td></tr>
+          <tr><td class="feat">No stigma</td><td class="us">Apple Watch</td><td class="muted">Apple Watch</td><td class="muted">Visible pendant</td></tr>
+          <tr><td class="feat">Location in alert</td><td class="us"><span class="yes">GPS included</span></td><td class="muted">No</td><td class="muted">Some models</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="wrap">
+    <div class="final-card">
+      <span class="eyebrow">Peace of mind, for free</span>
+      <h2>Set it up for someone you love today.</h2>
+      <p class="lead">FallGuard is completely free to download. Set it up for a parent, grandparent, or anyone you care about — and breathe a little easier.</p>
+      <a class="btn btn-primary" href="https://apps.apple.com/us/app/fallguard-companion/id6761449719">Download on the App Store</a>
+      <div class="micro">Requires Apple Watch Series 4 or later. iPhone companion app requires iOS 17+.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <a class="foot-brand" href="#top"><img src="fallguard_icon.png" alt="FallGuard app icon" />FallGuard</a>
+      <div class="foot-links">
+        <a href="https://fallguard.me/privacy.html">Privacy Policy</a>
+        <a href="mailto:Tjones7306@yahoo.com">Contact</a>
+        <a href="https://apps.apple.com/us/app/fallguard-companion/id6761449719">Download</a>
       </div>
     </div>
-  </section>
-
-  <!-- COMPARISON -->
-  <section class="comparison">
-    <h2 class="section-title">How FallGuard compares.</h2>
-    <p class="section-sub">The only free, family-first fall detection app for Apple Watch.</p>
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th class="highlight-col">FallGuard</th>
-          <th>Apple Built-in</th>
-          <th>Medical Alert Devices</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Cost</strong></td>
-          <td class="highlight-col"><span class="check">Free</span></td>
-          <td>Free (built-in)</td>
-          <td>$30-50/month</td>
-        </tr>
-        <tr>
-          <td><strong>Notifies family</strong></td>
-          <td class="highlight-col"><span class="check">Instant push</span></td>
-          <td><span class="cross">No (911 only)</span></td>
-          <td>Call center relays</td>
-        </tr>
-        <tr>
-          <td><strong>Uses existing device</strong></td>
-          <td class="highlight-col"><span class="check">Apple Watch</span></td>
-          <td><span class="check">Yes</span></td>
-          <td><span class="cross">New hardware</span></td>
-        </tr>
-        <tr>
-          <td><strong>Setup time</strong></td>
-          <td class="highlight-col"><span class="check">Under 2 min</span></td>
-          <td>Already on</td>
-          <td>Hardware + account</td>
-        </tr>
-        <tr>
-          <td><strong>No stigma</strong></td>
-          <td class="highlight-col"><span class="check">Apple Watch</span></td>
-          <td><span class="check">Apple Watch</span></td>
-          <td><span class="cross">Visible pendant</span></td>
-        </tr>
-        <tr>
-          <td><strong>Includes location</strong></td>
-          <td class="highlight-col"><span class="check">GPS in alert</span></td>
-          <td><span class="cross">No</span></td>
-          <td>Some models</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- CTA -->
-  <section class="cta-section" id="download">
-    <h2>Give your family peace of mind. For free.</h2>
-    <p>FallGuard is completely free to download. Set it up for your parent, grandparent, or anyone you care about.</p>
-    <a href="https://apps.apple.com/us/app/fallguard-companion/id6761449719" class="btn-primary" style="font-size:1.15rem;">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-      Download on the App Store
-    </a>
-    <p style="margin-top:16px; font-size:0.85rem;">Requires Apple Watch Series 4 or later. iPhone companion app requires iOS 17+.</p>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2026 FallGuard. All rights reserved. Made with care for families everywhere.</p>
-    <p style="margin-top:6px;"><a href="/privacy.html" style="color: var(--blue); text-decoration: none;">Privacy Policy</a> &middot; <a href="mailto:Tjones7306@yahoo.com" style="color: var(--blue); text-decoration: none;">Contact</a></p>
-    <p style="margin-top:6px;">Apple Watch is a trademark of Apple Inc. FallGuard is not affiliated with Apple Inc.</p>
-  </footer>
+    <p class="legal">
+      &copy; 2026 FallGuard. All rights reserved. Made with care for families everywhere.
+      FallGuard provides fall alerts and health monitoring for peace of mind and is not a medical device or emergency response service.
+      In an emergency, always rely on your local emergency number and the safety features built into Apple Watch.
+      Apple Watch is a trademark of Apple Inc. FallGuard is not affiliated with Apple Inc.
+    </p>
+  </div>
+</footer>
 
 </body>
 </html>
